@@ -80,12 +80,12 @@ function getIdleTime(startTime, endTime) {
     return secondsToTime(idleSeconds);
 }
 
-// ============================================================
+
 // Function 3: getActiveTime(shiftDuration, idleTime)
-// shiftDuration: (typeof string) formatted as h:mm:ss
-// idleTime: (typeof string) formatted as h:mm:ss
-// Returns: string formatted as h:mm:ss
-// ============================================================
+// shiftDuration: as h:mm:ss
+// idleTime: as h:mm:ss
+// Returns: as h:mm:ss
+
 function getActiveTime(shiftDuration, idleTime) {
     function timeToSeconds(timeStr) {
         let [hours, minutes, seconds] = timeStr.split(":").map(Number);
@@ -107,12 +107,12 @@ function getActiveTime(shiftDuration, idleTime) {
     return secondsToTime(activeSeconds);
 }
 
-// ============================================================
+
 // Function 4: metQuota(date, activeTime)
-// date: (typeof string) formatted as yyyy-mm-dd
-// activeTime: (typeof string) formatted as h:mm:ss
+// date: as yyyy-mm-dd
+// activeTime:  as h:mm:ss
 // Returns: boolean
-// ============================================================
+
 function metQuota(date, activeTime) {
     function timeToSeconds(timeStr) {
         let [hours, minutes, seconds] = timeStr.split(":").map(Number);
@@ -131,12 +131,10 @@ function metQuota(date, activeTime) {
     return activeSeconds >= quotaSeconds;
 }
 
-// ============================================================
+
 // Function 5: addShiftRecord(textFile, shiftObj)
-// textFile: (typeof string) path to shifts text file
-// shiftObj: (typeof object) has driverID, driverName, date, startTime, endTime
 // Returns: object with 10 properties or empty object {}
-// ============================================================
+
 function addShiftRecord(textFile, shiftObj) {
     let fileData = fs.readFileSync(textFile, { encoding: "utf8" }).trim();
     let lines = fileData.split("\n");
@@ -180,7 +178,7 @@ function addShiftRecord(textFile, shiftObj) {
         newRecordObj.hasBonus
     ].join(",");
 
-    // Insert after last record of same driverID, otherwise append
+    
     let insertIndex = lines.length;
     for (let i = 1; i < lines.length; i++) {
         let cols = lines[i].split(",");
@@ -195,14 +193,11 @@ function addShiftRecord(textFile, shiftObj) {
     return newRecordObj;
 }
 
-// ============================================================
+
 // Function 6: setBonus(textFile, driverID, date, newValue)
-// textFile: (typeof string) path to shifts text file
-// driverID: (typeof string)
-// date: (typeof string) formatted as yyyy-mm-dd
-// newValue: (typeof boolean)
-// Returns: nothing (void)
-// ============================================================
+// date: formatted as yyyy-mm-dd
+
+
 function setBonus(textFile, driverID, date, newValue) {
     let fileData = fs.readFileSync(textFile, { encoding: "utf8" }).trim();
     let lines = fileData.split("\n");
@@ -220,13 +215,10 @@ function setBonus(textFile, driverID, date, newValue) {
     fs.writeFileSync(textFile, lines.join("\n"), { encoding: "utf8" });
 }
 
-// ============================================================
+
 // Function 7: countBonusPerMonth(textFile, driverID, month)
-// textFile: (typeof string) path to shifts text file
-// driverID: (typeof string)
-// month: (typeof string) formatted as mm or m
-// Returns: number (-1 if driverID not found)
-// ============================================================
+// Returns: number 
+
 function countBonusPerMonth(textFile, driverID, month) {
     let fileData = fs.readFileSync(textFile, { encoding: "utf8" }).trim();
     let lines = fileData.split("\n");
@@ -258,13 +250,10 @@ function countBonusPerMonth(textFile, driverID, month) {
     return bonusCount;
 }
 
-// ============================================================
+
 // Function 8: getTotalActiveHoursPerMonth(textFile, driverID, month)
-// textFile: (typeof string) path to shifts text file
-// driverID: (typeof string)
-// month: (typeof number)
-// Returns: string formatted as hhh:mm:ss
-// ============================================================
+// Returns: hhh:mm:ss
+
 function getTotalActiveHoursPerMonth(textFile, driverID, month) {
     function timeToSeconds(timeStr) {
         let [hours, minutes, seconds] = timeStr.split(":").map(Number);
@@ -299,15 +288,11 @@ function getTotalActiveHoursPerMonth(textFile, driverID, month) {
     return secondsToTime(totalSeconds);
 }
 
-// ============================================================
+
 // Function 9: getRequiredHoursPerMonth(textFile, rateFile, bonusCount, driverID, month)
-// textFile: (typeof string) path to shifts text file
-// rateFile: (typeof string) path to driver rates text file
-// bonusCount: (typeof number) total bonuses for given driver per month
-// driverID: (typeof string)
-// month: (typeof number)
-// Returns: string formatted as hhh:mm:ss
-// ============================================================
+// bonusCount: total bonuses for given driver per month
+// Returns:  as hhh:mm:ss
+
 function getRequiredHoursPerMonth(textFile, rateFile, bonusCount, driverID, month) {
     function timeToSeconds(timeStr) {
         let [hours, minutes, seconds] = timeStr.split(":").map(Number);
@@ -368,14 +353,11 @@ function getRequiredHoursPerMonth(textFile, rateFile, bonusCount, driverID, mont
     return secondsToTime(totalSeconds);
 }
 
-// ============================================================
+
 // Function 10: getNetPay(driverID, actualHours, requiredHours, rateFile)
-// driverID: (typeof string)
-// actualHours: (typeof string) formatted as hhh:mm:ss
-// requiredHours: (typeof string) formatted as hhh:mm:ss
-// rateFile: (typeof string) path to driver rates text file
-// Returns: integer (net pay)
-// ============================================================
+// actualHours:  as hhh:mm:ss
+// requiredHours:  as hhh:mm:ss
+
 function getNetPay(driverID, actualHours, requiredHours, rateFile) {
     function timeToSeconds(timeStr) {
         let [hours, minutes, seconds] = timeStr.split(":").map(Number);
@@ -441,6 +423,3 @@ module.exports = {
     getRequiredHoursPerMonth,
     getNetPay
 };
-
-
-
